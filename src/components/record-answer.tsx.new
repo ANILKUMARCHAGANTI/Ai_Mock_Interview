@@ -77,9 +77,6 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
     }
   }, []);
 
-  // Add a manual control flag to prevent auto-restart loops
-  const [manuallyStoppedRecording, setManuallyStoppedRecording] = useState(false);
-  
   const {
     error,
     interimResult,
@@ -88,10 +85,10 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
     startSpeechToText,
     stopSpeechToText,
   } = useSpeechToText({
-    continuous: true, // Keep continuous true for uninterrupted recording
+    continuous: true,
     useLegacyResults: false,
     crossBrowser: true,
-    timeout: 600000, // Increased timeout to 10 minutes to ensure it doesn't stop prematurely
+    timeout: 30000, // Increased timeout for longer answers
     speechRecognitionProperties: {
       lang: 'en-US',
       interimResults: true, // Enable interim results for real-time updates
@@ -116,9 +113,6 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
   // Record user answer function
   const recordUserAnswer = async () => {
     if (isRecording) {
-      // Set the manual stop flag to prevent auto-restart loops
-      setManuallyStoppedRecording(true);
-      
       // Stop recording
       stopSpeechToText();
       toast.success('Recording stopped');
@@ -127,34 +121,19 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
       setTimeout(() => {
         // Trim the user answer to remove extra whitespace
         const trimmedAnswer = userAnswer?.trim() || "";
-        console.log('Final answer length:', trimmedAnswer.length, 'characters');
+        console.log('Answer length:', trimmedAnswer.length, 'characters');
         
         // Validate answer length
         if (trimmedAnswer.length < 30) {
           toast.error("Error", {
             description: `Your answer is only ${trimmedAnswer.length} characters. It should be more than 30 characters.`,
           });
-          setManuallyStoppedRecording(false); // Reset the flag
           return;
         }
         
-        // Store the final answer to ensure it's not lost during processing
-        const finalAnswer = trimmedAnswer;
-        processRecordedAnswer(finalAnswer);
-      }, 2000); // Increased timeout to ensure all speech is processed
+        processRecordedAnswer(trimmedAnswer);
+      }, 500);
     } else {
-      // Reset previous state before starting
-      setUserAnswer('');
-      setCurrentSpeech('');
-      setAiResult(null);
-      setVoiceAnalysis({
-        isAnalyzing: false,
-        result: null
-      });
-      
-      // Reset the manual stop flag before starting a new recording
-      setManuallyStoppedRecording(false);
-      
       // Start recording
       startRecording();
     }
@@ -169,34 +148,21 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
       return;
     }
     
-    // Reset the manual stop flag to ensure we can record
-    setManuallyStoppedRecording(false);
+    // Reset previous state before starting
+    setUserAnswer('');
+    setCurrentSpeech('');
+    setAiResult(null);
+    setVoiceAnalysis({
+      isAnalyzing: false,
+      result: null
+    });
     
     try {
-      // Start recording with retry mechanism
-      let attempts = 0;
-      const maxAttempts = 3;
-      let success = false;
-      
-      while (!success && attempts < maxAttempts) {
-        try {
-          await startSpeechToText();
-          success = true;
-          toast.success('Recording started', {
-            description: 'Speak clearly into your microphone'
-          });
-        } catch (err) {
-          attempts++;
-          console.error(`Speech recognition start error (attempt ${attempts}):`, err);
-          
-          if (attempts >= maxAttempts) {
-            throw err; // Re-throw if we've reached max attempts
-          }
-          
-          // Wait before retrying
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-      }
+      // Start recording
+      await startSpeechToText();
+      toast.success('Recording started', {
+        description: 'Speak clearly into your microphone'
+      });
     } catch (error) {
       console.error('Speech recognition start error:', error);
       toast.error('Speech Recognition Error', {
@@ -229,13 +195,7 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
       // Use a timeout to ensure UI updates before starting voice analysis
       setTimeout(async () => {
         try {
-          console.log('Starting voice analysis for answer with length:', trimmedAnswer.length);
-          
-          // Ensure the answer is substantial enough for analysis
-          if (trimmedAnswer.length < 50) {
-            console.warn('Answer may be too short for meaningful analysis');
-          }
-          
+          console.log('Starting voice analysis...');
           const analysisResult = await voiceAnalysisService.analyzeVoice(
             question.question,
             trimmedAnswer,
@@ -243,12 +203,6 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
           );
           
           console.log('Voice analysis result:', analysisResult);
-          
-          // Validate the analysis result
-          if (!analysisResult || typeof analysisResult.confidenceScore !== 'number') {
-            throw new Error('Invalid analysis result received');
-          }
-          
           setVoiceAnalysis({
             isAnalyzing: false,
             result: analysisResult
@@ -259,29 +213,13 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
           });
         } catch (error) {
           console.error("Voice analysis error:", error);
-          
-          // Generate a fallback analysis based on answer length and content
-          const answerLength = trimmedAnswer.length;
-          let confidenceScore = 5; // Default mid-range score
-          
-          if (answerLength > 500) confidenceScore = 8;
-          else if (answerLength > 300) confidenceScore = 7;
-          else if (answerLength > 100) confidenceScore = 6;
-          else if (answerLength < 50) confidenceScore = 3;
-          
-          // Create appropriate fallback result based on answer quality
+          // Provide a fallback analysis result if the service fails
           const fallbackResult = {
-            sentiment: confidenceScore >= 6 ? "Positive" : confidenceScore >= 4 ? "Neutral" : "Slightly Negative",
-            domainKnowledge: confidenceScore >= 6 ? 
-              "The candidate shows good understanding of the topic." : 
-              "The candidate shows basic understanding of the topic.",
-            voiceTone: confidenceScore >= 6 ? 
-              "Professional and clear" : 
-              "Somewhat hesitant but understandable",
-            confidenceScore: confidenceScore,
-            overallAssessment: confidenceScore >= 6 ? 
-              "Overall, this is a solid response that addresses the key points." :
-              "The response addresses some aspects of the question but could be more comprehensive."
+            sentiment: "Positive",
+            domainKnowledge: "The candidate shows good understanding of the topic.",
+            voiceTone: "Professional and clear",
+            confidenceScore: 7,
+            overallAssessment: "Overall, this is a solid response that addresses the key points."
           };
           
           setVoiceAnalysis({
@@ -293,7 +231,7 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
             description: "Using simplified analysis due to service limitations."
           });
         }
-      }, 1000); // Increased timeout to ensure proper processing
+      }, 500);
     } catch (error) {
       console.error("AI feedback generation error:", error);
       toast.error("Error", {
@@ -470,59 +408,44 @@ export const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerPr
       toast.error('Speech Recognition Error', {
         description: `${error || 'Failed to recognize speech'}. Please check your microphone.`,
       });
-      
-      // Only stop recording if there's a critical error and we're not manually stopping
-      if (isRecording && !manuallyStoppedRecording) {
+      // Stop recording if there's an error
+      if (isRecording) {
         stopSpeechToText();
-        // Don't automatically restart after an error
       }
     }
-  }, [error, isRecording, stopSpeechToText, manuallyStoppedRecording]);
+  }, [error, isRecording, stopSpeechToText]);
 
   // Process speech results in real-time
   useEffect(() => {
-    // Don't process results if we've manually stopped recording
-    if (manuallyStoppedRecording) return;
-    
     // Update current speech from interim results for real-time feedback
     if (interimResult) {
       setCurrentSpeech(interimResult);
-      console.log('Interim result:', interimResult);
     }
     
     // Update full transcript when results change
     if (results && results.length > 0) {
-      try {
-        // Process all results to build the complete transcript
-        // Use a more robust approach to handle different result formats
-        let processedResults = '';
-        
-        // Process each result and concatenate
-        for (let i = 0; i < results.length; i++) {
-          const result = results[i];
-          if (typeof result === 'object' && result !== null && 'transcript' in result) {
-            processedResults += ' ' + result.transcript;
-          } else if (typeof result === 'string') {
-            processedResults += ' ' + result;
-          }
-        }
-        
-        // Clean up the processed results
-        processedResults = processedResults.trim();
-        
-        // Only update if we have content to avoid overwriting with empty string
-        if (processedResults) {
-          // Update the user answer with the complete transcript
-          setUserAnswer(processedResults);
-          console.log('Updated user answer length:', processedResults.length);
-        }
-      } catch (error) {
-        console.error('Error processing speech results:', error);
-      }
+      // Process all results to build the complete transcript
+      const processedResults = results
+        .filter(result => typeof result !== 'string')
+        .map(result => (typeof result !== 'string' ? result.transcript : ''))
+        .join(' ');
+      
+      // Update the user answer with the complete transcript
+      setUserAnswer(processedResults);
+      console.log('Updated user answer:', processedResults);
     }
-  }, [results, interimResult, manuallyStoppedRecording]);
+  }, [results, interimResult]);
   
-  // This duplicate error handler has been removed to prevent infinite loops
+  // Additional effect to handle interim results separately
+  useEffect(() => {
+    if (!isRecording) return;
+    
+    // This ensures the current speech is always updated in real-time
+    if (interimResult) {
+      console.log('Interim result:', interimResult);
+      setCurrentSpeech(interimResult);
+    }
+  }, [interimResult, isRecording]);
 
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">

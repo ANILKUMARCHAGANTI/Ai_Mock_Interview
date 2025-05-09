@@ -69,26 +69,26 @@ export const Footer = () => {
             </p>
           </div>
 
-          {/* Third Column: Services */}
+          {/* Third Column: Features */}
           <div>
-            <h3 className="font-bold text-lg mb-4">Services</h3>
-            <ul>
-              <FooterLink to="/services/interview-prep">
-                Interview Preparation
-              </FooterLink>
-              <FooterLink to="/services/career-coaching">
-                Career Coaching
-              </FooterLink>
-              <FooterLink to="/services/resume-building">
-                Resume Building
-              </FooterLink>
+            <h3 className="font-bold text-lg mb-4">Features</h3>
+            <ul className="space-y-2">
+              <li className="text-gray-300">
+                AI-Powered Interviews
+              </li>
+              <li className="text-gray-300">
+                Voice Analysis Technology
+              </li>
+              <li className="text-gray-300">
+                Personalized Feedback
+              </li>
             </ul>
           </div>
 
           {/* Fourth Column: Address and Social Media */}
           <div>
             <h3 className="font-bold text-lg mb-4">Contact Us</h3>
-            <p className="mb-4">123 AI Street, Tech City, 12345</p>
+            <p className="mb-4">Amrita University Hostel, Kasavanahalli, Bangalore</p>
             <div className="flex gap-4">
               <SocialLink
                 href="https://facebook.com"
