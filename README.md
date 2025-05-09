@@ -1,50 +1,97 @@
-# React + TypeScript + Vite
+# AI Mock Interview Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![AI Mock Interview Banner](public/assets/img/hero.jpg)
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+AI Mock Interview is an innovative platform designed to help job seekers prepare for interviews with AI-powered feedback and analysis. Our mission is to make interview preparation accessible, effective, and personalized for everyone.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### AI-Powered Interviews
+Practice with our AI interviewer that simulates real interview scenarios. Get asked industry-specific questions and receive instant feedback on your responses.
 
-- Configure the top-level `parserOptions` property like this:
+### Voice Analysis Technology
+Our advanced voice analysis technology evaluates your tone, confidence, and delivery. Get insights on your speech patterns and learn how to communicate more effectively.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Personalized Feedback
+Receive detailed, personalized feedback on your interview performance. Understand your strengths and areas for improvement with actionable suggestions.
+
+### Industry-Specific Preparation
+Get tailored interview preparation for your specific industry, whether it's tech, finance, healthcare, or any other field. Our AI adapts questions to match industry standards.
+
+## Tech Stack
+
+- **Frontend**: React, TypeScript, Vite
+- **UI Framework**: Tailwind CSS, Shadcn UI
+- **Authentication**: Clerk
+- **State Management**: React Context API
+- **Form Handling**: React Hook Form
+- **Voice Analysis**: React Hook Speech to Text
+- **Contact Form**: Formspree
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/ai-mock-interview.git
+   cd ai-mock-interview
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Set up environment variables
+   Create a `.env` file in the root directory and add your API keys:
+   ```
+   VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+   ```
+
+4. Start the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+## Project Structure
+
+```
+├── public/             # Static assets
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── layouts/        # Page layouts
+│   ├── lib/            # Utility functions and helpers
+│   ├── routes/         # Page components
+│   ├── App.tsx         # Main application component
+│   └── main.tsx        # Entry point
+├── package.json        # Project dependencies
+└── README.md           # Project documentation
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Contact
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+For any inquiries, please reach out to us:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **Email**: anilankitha22@gmail.com
+- **Phone**: +91 8499046800
+- **Address**: Amrita University Hostel, Kasavanahalli, Bangalore, India
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+© 2025 AI Mock Interview. All rights reserved.
