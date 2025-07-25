@@ -104,7 +104,7 @@ Get tailored interview preparation for your specific industry, whether it's tech
 ## 4. Analysis and Feedback Visualization
    ![AI Mock Interview Banner](Interviewanalysis.png)
 ## 5. Interview Question Feedback System
-    ![AI Mock Interview Banner](BHED.png)
+   ![AI Mock Interview Banner](BHED.png)
 ## Contact
 
 For any inquiries, please reach out to us:
