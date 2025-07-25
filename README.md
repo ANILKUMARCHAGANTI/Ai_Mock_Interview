@@ -95,15 +95,15 @@ Get tailored interview preparation for your specific industry, whether it's tech
 └── README.md           # Project documentation
 ```
 ## Workflow
-## Block Diagram or Architecture diagram
+## 1. Block Diagram or Architecture diagram
    ![AI Mock Interview Banner](Blockdiagram.jpg)
- ## Interview Configuration Interface
+## 2. Interview Configuration Interface
    ![AI Mock Interview Banner](Maininterface.png)
-## Question and Recording Interface
+## 3. Question and Recording Interface
    ![AI Mock Interview Banner](Questionandrecordinginterface.png)
-## Analysis and Feedback Visualization
+## 4. Analysis and Feedback Visualization
    ![AI Mock Interview Banner](Interviewanalysis.png)
-## Interview Question Feedback System
+## 5. Interview Question Feedback System
     ![AI Mock Interview Banner](BHED.png)
 ## Contact
 
