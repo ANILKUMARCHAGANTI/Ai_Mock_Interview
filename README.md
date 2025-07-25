@@ -94,7 +94,9 @@ Get tailored interview preparation for your specific industry, whether it's tech
 ├── package.json        # Project dependencies
 └── README.md           # Project documentation
 ```
-
+## Workflow
+1. Block Diagram or Architecture diagram
+   
 ## Contact
 
 For any inquiries, please reach out to us:
