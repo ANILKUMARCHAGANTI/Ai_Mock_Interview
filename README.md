@@ -96,7 +96,7 @@ Get tailored interview preparation for your specific industry, whether it's tech
 ```
 ## Workflow
 1. Block Diagram or Architecture diagram
-   
+   ![AI Mock Interview Banner](Blockdiagram.jpg)
 ## Contact
 
 For any inquiries, please reach out to us:
