@@ -1,5 +1,5 @@
 import { Container } from "@/components/container";
-import Marquee from "react-fast-Marquee";
+import Marquee from "react-fast-marquee";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { MarqueImg } from "@/components/marquee-img";
