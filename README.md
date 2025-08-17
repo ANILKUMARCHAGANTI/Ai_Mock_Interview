@@ -1,14 +1,5 @@
 # AI Mock Interview Platform
 
-## Team Details
-
-| Sl. No. | Reg. No. | Name of the student |
-|---------|----------|--------------------|
-| 1 | BL.EN.U4CSE22213 | CH. Anil Kumar |
-| 2 | BL.EN.U4CSE22228 | K. Gnana deep |
-| 3 | BL.EN.U4CSE22235 | MMS. Pavan |
-| 4 | BL.EN.U4CSE22277 | R.Manjunath |
-
 **Course Code:** 19CSE314  
 **Course Name:** Software Engineering  
 **Guide:** Ms. Pooja Gowda
