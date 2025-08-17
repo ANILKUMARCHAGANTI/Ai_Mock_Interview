@@ -1,4 +1,5 @@
 [build]
+  base = "/"  # Explicitly set the base directory to root
   command = "pnpm run build"
   publish = "dist"
 
