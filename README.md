@@ -94,7 +94,17 @@ Get tailored interview preparation for your specific industry, whether it's tech
 ├── package.json        # Project dependencies
 └── README.md           # Project documentation
 ```
-
+## Workflow
+## 1. Block Diagram or Architecture diagram
+   ![AI Mock Interview Banner](Blockdiagram.jpg)
+## 2. Interview Configuration Interface
+   ![AI Mock Interview Banner](Maininterface.png)
+## 3. Question and Recording Interface
+   ![AI Mock Interview Banner](Questionandrecordinginterface.png)
+## 4. Analysis and Feedback Visualization
+   ![AI Mock Interview Banner](Interviewanalysis.png)
+## 5. Interview Question Feedback System
+   ![AI Mock Interview Banner](BHED.png)
 ## Contact
 
 For any inquiries, please reach out to us:
@@ -105,7 +115,7 @@ For any inquiries, please reach out to us:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed - see the LICENSE file for details.
 
 ---
 
